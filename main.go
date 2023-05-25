@@ -1,6 +1,7 @@
 package main
 
 import (
+	authRoutes "github.com/araquach/apiAuth/routes"
 	financeRoutes "github.com/araquach/apiFinance23/routes"
 	timeRoutes "github.com/araquach/apiTime/routes"
 	db "github.com/araquach/dbService"
@@ -28,10 +29,12 @@ func main() {
 	}
 
 	// Load API Routes
+	authRouter := authRoutes.AuthRouter()
 	financeRouter := financeRoutes.FinanceRouter()
 	timeRouter := timeRoutes.TimeRouter()
 	mainRouter := mux.NewRouter()
 
+	mainRouter.PathPrefix("/api/auth").Handler(authRouter)
 	mainRouter.PathPrefix("/api/finance").Handler(financeRouter)
 	mainRouter.PathPrefix("/api/time").Handler(timeRouter)
 
