@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/araquach/apiAuth/routes"
-	finance "github.com/araquach/apiFinance23/routes"
-	apiTime "github.com/araquach/apiTime/routes"
+	financeRoutes "github.com/araquach/apiFinance23/routes"
+	timeRoutes "github.com/araquach/apiTime/routes"
 	db "github.com/araquach/dbService"
+	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	"log"
 	"net/http"
@@ -28,12 +28,16 @@ func main() {
 	}
 
 	// Load API Routes
-	finance.FinanceRouter()
-	apiTime.TimeRouter()
+	financeRouter := financeRoutes.FinanceRouter()
+	timeRouter := timeRoutes.TimeRouter()
+	mainRouter := mux.NewRouter()
+
+	mainRouter.PathPrefix("/api/finance").Handler(financeRouter)
+	mainRouter.PathPrefix("/api/time").Handler(timeRouter)
 
 	log.Printf("Starting server on %s", port)
 
-	http.ListenAndServe(":"+port, forceSsl(&routes.R))
+	http.ListenAndServe(":"+port, forceSsl(mainRouter))
 }
 
 func forceSsl(next http.Handler) http.Handler {
