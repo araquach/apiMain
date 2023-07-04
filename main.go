@@ -43,15 +43,15 @@ func main() {
 	teamRouter := teamRoutes.TeamRouter()
 	financeRouter := financeRoutes.FinanceRouter()
 	timeRouter := timeRoutes.TimeRouter()
+
 	mainRouter := mux.NewRouter()
+	mainRouter.Use(middleware.ContentTypeMiddleware)
+	mainRouter.Use(c.Handler)
 
 	mainRouter.PathPrefix("/api/auth").Handler(authRouter)
 	mainRouter.PathPrefix("/api/team").Handler(teamRouter)
 	mainRouter.PathPrefix("/api/finance").Handler(financeRouter)
 	mainRouter.PathPrefix("/api/time").Handler(timeRouter)
-
-	mainRouter.Use(middleware.ContentTypeMiddleware)
-	mainRouter.Use(c.Handler)
 
 	log.Printf("Starting server on %s", port)
 
