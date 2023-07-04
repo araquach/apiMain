@@ -3,10 +3,13 @@ package main
 import (
 	authRoutes "github.com/araquach/apiAuth/routes"
 	financeRoutes "github.com/araquach/apiFinance23/routes"
+	"github.com/araquach/apiHelpers/middleware"
+	teamRoutes "github.com/araquach/apiTeam/routes"
 	timeRoutes "github.com/araquach/apiTime/routes"
 	db "github.com/araquach/dbService"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/rs/cors"
 	"log"
 	"net/http"
 	"os"
@@ -28,15 +31,27 @@ func main() {
 		log.Fatal("$PORT must be set")
 	}
 
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:5173"}, // replace with your domain
+		AllowCredentials: true,
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"}, // or other methods you need
+		AllowedHeaders:   []string{"*"},
+	})
+
 	// Load API Routes
 	authRouter := authRoutes.AuthRouter()
+	teamRouter := teamRoutes.TeamRouter()
 	financeRouter := financeRoutes.FinanceRouter()
 	timeRouter := timeRoutes.TimeRouter()
 	mainRouter := mux.NewRouter()
 
 	mainRouter.PathPrefix("/api/auth").Handler(authRouter)
+	mainRouter.PathPrefix("/api/team").Handler(teamRouter)
 	mainRouter.PathPrefix("/api/finance").Handler(financeRouter)
 	mainRouter.PathPrefix("/api/time").Handler(timeRouter)
+
+	mainRouter.Use(middleware.ContentTypeMiddleware)
+	mainRouter.Use(c.Handler)
 
 	log.Printf("Starting server on %s", port)
 
