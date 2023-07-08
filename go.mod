@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/araquach/apiAuth v0.0.1
 	github.com/araquach/apiFinance23 v0.0.1
+	github.com/araquach/apiHelpers v0.0.1
 	github.com/araquach/apiTeam v0.0.1
 	github.com/araquach/apiTime v0.0.1
 	github.com/araquach/dbService v0.0.1
@@ -14,7 +15,6 @@ require (
 )
 
 require (
-	github.com/araquach/apiHelpers v0.0.1 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
